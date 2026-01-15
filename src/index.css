@@ -1,0 +1,139 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,500;0,600;1,600;0,700&family=Bricolage+Grotesque:wght@700&display=swap");
+
+:root {
+    --neutral-900: hsl(243, 96%, 9%);
+    --neutral-800: hsl(243, 27%, 20%);
+    --neutral-700: hsl(243, 23%, 24%);
+    --neutral-600: hsl(243, 23%, 30%);
+    --neutral-300: hsl(240, 6%, 70%);
+    --neutral-200: hsl(250, 6%, 84%);
+    --neutral-0: hsl(0, 0%, 100%);
+
+    --orange-500: hsl(28, 100%, 52%);
+
+    --blue-500: hsl(233, 67%, 56%);
+    --blue-700: hsl(248, 70%, 36%);
+
+    --main-font: "DM Sans", sans-serif;
+    --second-font: "Bricolage Grotesque", sans-serif;
+}
+
+body {
+    background-color: var(--neutral-900);
+}
+
+body,
+#root {
+    font-family: var(--main-font);
+}
+
+.container {
+    max-width: 1460px;
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+.ant-btn {
+    background-color: var(--neutral-700);
+    color: #fff;
+    padding: 8px 20px;
+    height: auto;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in;
+}
+
+.ant-btn:hover {
+    background-color: var(--neutral-600);
+}
+
+.units-dropdown .ant-dropdown-menu {
+    background-color: var(--neutral-700);
+}
+
+.units-dropdown .ant-dropdown-menu-item:hover {
+    background-color: var(--neutral-600);
+}
+
+.ant-dropdown-menu-title-content {
+    color: var(--neutral-300);
+}
+.ant-dropdown-menu-title-content div span {
+    color: white;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+    background-color: var(--neutral-800);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    width: 40%;
+}
+
+.search-input input {
+    width: 100%;
+    outline: none;
+    color: #fff;
+    font-size: 18px;
+    font-family: var(--second-font);
+}
+
+.search-btn {
+    color: #fff;
+    background-color: var(--blue-500);
+    padding: 14px 24px;
+    border-radius: 12px;
+    margin-left: 14px;
+}
+
+.weather-card {
+    background-image: url("/bg-today-large.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 300px;
+
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.weather-main-subtitle {
+    color: var(--neutral-300);
+    margin-top: 12px;
+}
+
+.weather-stats-card {
+    background-color: var(--neutral-800);
+    border-radius: 12px;
+    padding: 20px;
+    width: 25%;
+}
+
+.daily-forecast-card,
+.hourly-forecast,
+.hourly-forecast-card {
+    background-color: var(--neutral-800);
+    border-radius: 12px;
+}
+
+.hourly-forecast-card {
+    background-color: var(--neutral-700);
+    padding: 12px 8px;
+}
