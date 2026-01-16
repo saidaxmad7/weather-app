@@ -1,25 +1,80 @@
-function DailyForecast() {
+import { useState } from "react";
+import { ConfigProvider } from "antd";
+import { useWeather } from "../../hooks/useWeather";
+import HourlyBtn from "../btns/HourlyBtn";
+import { getWeatherIcon } from "../../utils/getWeatherIcon";
+
+function HourlyForecast({ city }: { city: string }) {
+    const { data, isLoading } = useWeather(city);
+    const [dayIndex, setDayIndex] = useState(0);
+
+    if (isLoading || !data) return <p className='text-white'>Loading...</p>;
+
+    const now = new Date(data.location.localtime);
+    const currentHour = now.getHours();
+
+    const hours = data.forecast.forecastday[dayIndex].hour
+        .filter((hour) => {
+            const hourTime = new Date(hour.time).getHours();
+            return hourTime >= currentHour;
+        })
+        .slice(0, 8);
+
     return (
-        <section className='gap-2 mt-10 pb-14'>
-            <h1 className='text-lg text-white mb-3'>Daily forecast</h1>
-            <div className='flex'>
-                <div className='daily-forecast-card p-3 w-[14%]'>
-                    <p className='text-white text-center'>Tue</p>
-                    <div className='w-full flex justify-center mt-2'>
-                        <img
-                            className='w-10 h-10'
-                            src='/icon-storm.webp'
-                            alt='storm'
-                        />
-                    </div>
-                    <div className='flex items-center justify-between mt-2'>
-                        <p className='text-white'>20</p>
-                        <p className='text-white'>14</p>
-                    </div>
-                </div>
+        <section className='p-4 hourly-forecast h-[92%]'>
+            <div className='flex justify-between items-center'>
+                <p className='text-white text-xl'>Hourly forecast</p>
+
+                <ConfigProvider
+                    theme={{
+                        components: {
+                            Dropdown: {
+                                colorBgElevated: "var(--neutral-700)",
+                            },
+                        },
+                    }}
+                >
+                    <HourlyBtn
+                        days={data.forecast.forecastday}
+                        activeDay={dayIndex}
+                        onChange={setDayIndex}
+                    />
+                </ConfigProvider>
             </div>
+
+            <nav className='gap-y-2 mt-3'>
+                {hours.map((hour) => {
+                    const time = new Date(hour.time).toLocaleTimeString(
+                        "en-US",
+                        {
+                            hour: "numeric",
+                            hour12: true,
+                        }
+                    );
+
+                    return (
+                        <div
+                            key={hour.time}
+                            className='hourly-forecast-card mt-3 flex justify-between items-center'
+                        >
+                            <div className='flex items-center gap-1'>
+                                <img
+                                    className='w-8 h-8'
+                                    src={getWeatherIcon(
+                                        hour.condition,
+                                        hour.is_day
+                                    )}
+                                    alt={hour.condition.text}
+                                />
+                                <p className='text-white'>{time}</p>
+                            </div>
+                            <p className='text-white'>{hour.temp_c}°</p>
+                        </div>
+                    );
+                })}
+            </nav>
         </section>
     );
 }
 
-export default DailyForecast;
+export default HourlyForecast;

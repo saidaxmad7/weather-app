@@ -101,6 +101,11 @@ button {
     padding: 14px 24px;
     border-radius: 12px;
     margin-left: 14px;
+    transition: all 0.3s ease-in;
+}
+
+.search-btn:hover {
+    background-color: var(--blue-700);
 }
 
 .weather-card {

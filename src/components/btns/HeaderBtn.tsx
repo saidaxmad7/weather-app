@@ -1,44 +1,44 @@
 import { Dropdown, type MenuProps } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import type { Units } from "../Layout/Layout";
 
-function HeaderBtn() {
-    const [units, setUnits] = useState({
-        temp: "c",
-        wind: "kmh",
-        precip: "mm",
-    });
+interface Props {
+    units: Units;
+    onChange: (units: Units) => void;
+}
 
-    const item = (label: string, active: boolean, onClick: () => void) => (
-        <div
-            onClick={onClick}
-            style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                cursor: "pointer",
-                width: "100%",
-            }}
-        >
-            <span>{label}</span>
-            {active && <CheckOutlined />}
-        </div>
-    );
-
+function HeaderBtn({ units, onChange }: Props) {
     const menu: MenuProps = {
+        onClick: ({ key }) => {
+            if (key === "c") onChange({ ...units, temp: "c" });
+            if (key === "f") onChange({ ...units, temp: "f" });
+
+            if (key === "kmh") onChange({ ...units, wind: "kmh" });
+            if (key === "mph") onChange({ ...units, wind: "mph" });
+
+            if (key === "mm") onChange({ ...units, precip: "mm" });
+            if (key === "in") onChange({ ...units, precip: "in" });
+        },
+
         items: [
             { key: "temp-title", label: "Temperature", disabled: true },
 
             {
                 key: "c",
-                label: item("Celsius (°C)", units.temp === "c", () =>
-                    setUnits({ ...units, temp: "c" })
+                label: (
+                    <div className='flex justify-between'>
+                        Celsius (°C)
+                        {units.temp === "c" && <CheckOutlined />}
+                    </div>
                 ),
             },
             {
                 key: "f",
-                label: item("Fahrenheit (°F)", units.temp === "f", () =>
-                    setUnits({ ...units, temp: "f" })
+                label: (
+                    <div className='flex justify-between'>
+                        Fahrenheit (°F)
+                        {units.temp === "f" && <CheckOutlined />}
+                    </div>
                 ),
             },
 
@@ -48,14 +48,20 @@ function HeaderBtn() {
 
             {
                 key: "kmh",
-                label: item("km/h", units.wind === "kmh", () =>
-                    setUnits({ ...units, wind: "kmh" })
+                label: (
+                    <div className='flex justify-between'>
+                        km/h
+                        {units.wind === "kmh" && <CheckOutlined />}
+                    </div>
                 ),
             },
             {
                 key: "mph",
-                label: item("mph", units.wind === "mph", () =>
-                    setUnits({ ...units, wind: "mph" })
+                label: (
+                    <div className='flex justify-between'>
+                        mph
+                        {units.wind === "mph" && <CheckOutlined />}
+                    </div>
                 ),
             },
 
@@ -65,14 +71,20 @@ function HeaderBtn() {
 
             {
                 key: "mm",
-                label: item("Millimeters (mm)", units.precip === "mm", () =>
-                    setUnits({ ...units, precip: "mm" })
+                label: (
+                    <div className='flex justify-between'>
+                        Millimeters (mm)
+                        {units.precip === "mm" && <CheckOutlined />}
+                    </div>
                 ),
             },
             {
                 key: "in",
-                label: item("Inches (in)", units.precip === "in", () =>
-                    setUnits({ ...units, precip: "in" })
+                label: (
+                    <div className='flex justify-between'>
+                        Inches (in)
+                        {units.precip === "in" && <CheckOutlined />}
+                    </div>
                 ),
             },
         ],

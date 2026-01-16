@@ -1,13 +1,17 @@
 import { ConfigProvider } from "antd";
 import HeaderBtn from "../btns/HeaderBtn";
+import type { Units } from "./Layout";
 
-function Header() {
+interface Props {
+    units: Units;
+    onChangeUnits: (units: Units) => void;
+}
+
+function Header({ units, onChangeUnits }: Props) {
     return (
         <header className='pt-8 pb-8'>
             <div className='container flex justify-between'>
-                <div className='header-logo'>
-                    <img src='/logo.svg' alt='site logo' />
-                </div>
+                <img src='/logo.svg' alt='site logo' />
 
                 <ConfigProvider
                     theme={{
@@ -18,7 +22,7 @@ function Header() {
                         },
                     }}
                 >
-                    <HeaderBtn />
+                    <HeaderBtn units={units} onChange={onChangeUnits} />
                 </ConfigProvider>
             </div>
         </header>
