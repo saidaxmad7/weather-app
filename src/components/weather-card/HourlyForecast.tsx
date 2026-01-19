@@ -1,52 +1,97 @@
+import { useState } from "react";
+import { ConfigProvider } from "antd";
 import { useWeather } from "../../hooks/useWeather";
+import HourlyBtn from "../btns/HourlyBtn";
+import { getWeatherIcon } from "../../utils/getWeatherIcon";
+import type { Units } from "../Layout/Layout";
 
-function DailyForecast({ city }: { city: string }) {
+interface Hour {
+    time: string;
+    temp_c: number;
+    is_day: number;
+    condition: {
+        text: string;
+        icon: string;
+        code: number;
+    };
+}
+
+function HourlyForecast({ city, units }: { city: string; units: Units }) {
     const { data, isLoading } = useWeather(city);
+    const [dayIndex, setDayIndex] = useState(0);
 
-    if (isLoading || !data) return <p>Loading...</p>;
+    if (isLoading || !data) return <p className='text-white'>Loading...</p>;
+
+    const now = new Date(data.location.localtime);
+    const currentHour = now.getHours();
+
+    const hours = data.forecast.forecastday[dayIndex].hour
+        .filter((hour: Hour) => {
+            const hourTime = new Date(hour.time).getHours();
+            return hourTime >= currentHour;
+        })
+        .slice(0, 8);
 
     return (
-        <section className='gap-2 mt-10 pb-14'>
-            <h1 className='text-lg text-white mb-3'>Daily forecast</h1>
+        <section className='p-4 hourly-forecast h-[92%]'>
+            <div className='flex justify-between items-center'>
+                <p className='text-white text-xl'>Hourly forecast</p>
 
-            <div className='flex gap-2'>
-                {data.forecast.forecastday.map((day) => {
-                    const dayName = new Date(day.date).toLocaleDateString(
+                <ConfigProvider
+                    theme={{
+                        components: {
+                            Dropdown: {
+                                colorBgElevated: "var(--neutral-700)",
+                            },
+                        },
+                    }}
+                >
+                    <HourlyBtn
+                        days={data.forecast.forecastday}
+                        activeDay={dayIndex}
+                        onChange={setDayIndex}
+                    />
+                </ConfigProvider>
+            </div>
+
+            <nav className='mt-4 flex md:block gap-2 overflow-x-auto md:overflow-visible'>
+                {hours.map((hour: Hour) => {
+                    const time = new Date(hour.time).toLocaleTimeString(
                         "en-US",
                         {
-                            weekday: "short",
-                        }
+                            hour: "numeric",
+                            hour12: true,
+                        },
                     );
+
+                    const temp =
+                        units.temp === "c"
+                            ? hour.temp_c
+                            : (hour.temp_c * 9) / 5 + 32;
 
                     return (
                         <div
-                            key={day.date}
-                            className='daily-forecast-card p-3 w-[14%]'
+                            key={hour.time}
+                            className='hourly-forecast-card flex-shrink-0 md:flex md:justify-between items-center px-3 py-2 mt-3'
                         >
-                            <p className='text-white text-center'>{dayName}</p>
-
-                            <div className='w-full flex justify-center mt-2'>
+                            <div className='flex items-center gap-1'>
                                 <img
-                                    className='w-10 h-10'
-                                    src={day.day.condition.icon}
-                                    alt={day.day.condition.text}
+                                    className='w-8 h-8'
+                                    src={getWeatherIcon(
+                                        hour.condition,
+                                        hour.is_day,
+                                    )}
+                                    alt={hour.condition.text}
                                 />
+                                <p className='text-white'>{time}</p>
                             </div>
-
-                            <div className='flex items-center justify-between mt-2'>
-                                <p className='text-white'>
-                                    {day.day.maxtemp_c}°
-                                </p>
-                                <p className='text-white'>
-                                    {day.hour[20]?.temp_c}°
-                                </p>
-                            </div>
+                            <p className='text-white'>{temp.toFixed(0)}°</p>
                         </div>
                     );
                 })}
-            </div>
+            </nav>
         </section>
     );
 }
 
-export default DailyForecast;
+export default HourlyForecast;

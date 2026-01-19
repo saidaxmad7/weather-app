@@ -9,7 +9,7 @@ export type Units = {
 };
 
 function Layout() {
-  const [city, setCity] = useState("Berlin");
+  const [city, setCity] = useState("");
   const [units, setUnits] = useState<Units>({
     temp: "c",
     wind: "kmh",

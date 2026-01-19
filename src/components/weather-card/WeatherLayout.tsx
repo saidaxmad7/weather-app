@@ -3,6 +3,7 @@ import type { Units } from "../Layout/Layout";
 import DailyForecast from "./DailyForecast";
 import HourlyForecast from "./HourlyForecast";
 import WeatherMain from "./WeatherMain";
+import WeatherSkeleton from "./WeatherSkeleton";
 import WeatherStats from "./WeatherStats";
 
 export interface Props {
@@ -12,6 +13,7 @@ export interface Props {
 
 function WeatherLayout({ city, units }: Props) {
     const { isError } = useWeather(city);
+
     if (isError) {
         return (
             <p className='text-center text-red-400 text-3xl mt-10'>
@@ -19,16 +21,23 @@ function WeatherLayout({ city, units }: Props) {
             </p>
         );
     }
+
     return (
         <div className='container'>
-            <div className='grid grid-cols-[1fr_420px] gap-6 mt-12'>
-                <div>
-                    <WeatherMain city={city} />
-                    <WeatherStats city={city} units={units} />
-                    <HourlyForecast city={city} />
-                </div>
+            <div className='md:grid md:grid-cols-[1fr_420px] gap-6 mt-12'>
+                {!city ? (
+                    <WeatherSkeleton />
+                ) : (
+                    <>
+                        <div>
+                            <WeatherMain city={city} units={units} />
+                            <WeatherStats city={city} units={units} />
+                            <DailyForecast city={city} units={units} />
+                        </div>
 
-                <DailyForecast city={city} />
+                        <HourlyForecast city={city} units={units} />
+                    </>
+                )}
             </div>
         </div>
     );

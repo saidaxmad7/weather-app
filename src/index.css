@@ -73,9 +73,7 @@ button {
 }
 
 .search-form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
 }
 
 .search-input {
@@ -84,7 +82,7 @@ button {
     padding: 12px;
     display: flex;
     align-items: center;
-    width: 40%;
+    width: 100%;
 }
 
 .search-input input {
@@ -128,7 +126,6 @@ button {
     background-color: var(--neutral-800);
     border-radius: 12px;
     padding: 20px;
-    width: 25%;
 }
 
 .daily-forecast-card,
@@ -141,4 +138,25 @@ button {
 .hourly-forecast-card {
     background-color: var(--neutral-700);
     padding: 12px 8px;
+}
+
+@media screen and (max-width: 768px) {
+    .search-btn {
+        margin-left: 0;
+    }
+
+    .weather-main-texts {
+        text-align: center;
+    }
+
+    .weather-main-info {
+        justify-content: center;
+    }
+
+    .weather-card {
+        height: 250px;
+        width: 100%;
+    }
+
+
 }
